@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
 
+# python3 pfuzzer.py
+# author: Omar Fayyad
+#
+# script fuzzes applications for overflow
+# 
+# run the script with no arguments. Make sure to change the IP address and port number and Prefix ( if any ).
+#
+# example: pfuzzer
+#  result will show Fuzzing crashed at {} bytes
+#----------------------------------------------------------------------------------
+
+# import python3 modules needed for the script
+
 import socket, time, sys
 
 ip = "10.10.28.152"
